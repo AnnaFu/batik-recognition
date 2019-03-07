@@ -1,0 +1,265 @@
+#:kivy 1.10.0
+
+ScreenManager:
+    id: screen_manager
+    HomeScreen:
+        id: home_screen
+        name: 'HomeScreen'
+        manager: screen_manager
+    UploadScreen:
+    	id: upload_screen
+    	name: 'UploadScreen'
+    	manager: screen_manager
+    DescScreen:
+    	id: desc_screen
+        name: 'DescScreen'
+        manager: screen_manager
+        mIndex: upload_screen.mIndex
+        img_path: upload_screen.img_path
+    StoryScreen:
+    	id: story_screen
+    	name: 'StoryScreen'
+    	manager: screen_manager
+    MotifScreen:
+    	id: motif_screen
+    	name: 'MotifScreen'
+    	manager: screen_manager
+    	motif: story_screen.motif
+    
+<HomeScreen>:
+    GridLayout:
+    	canvas.before:
+    		Rectangle:
+    			pos: self.pos
+    			size: self.size
+    			source: 'pic/wall.jpg'
+        rows: 2
+        Label:
+            font_size: 80
+            text: "Find Out \nthe Story Behind \n[b][color=ff3333]Batik[/color][/b]"
+            markup: True
+            size: self.texture_size
+            halign: 'center'
+            valign: 'center'
+        BoxLayout:
+            orientation: 'horizontal'
+            padding: 10
+            spacing: 10
+            size_hint: 1, .1
+            Button:
+                id: motif
+                text: 'Batik Story'
+                on_release: app.root.current = 'StoryScreen'
+            Button:
+                id: upload_button
+                text: 'Upload Image'                
+                on_release: app.root.current = 'UploadScreen'
+
+<UploadScreen>:
+	BoxLayout:
+		orientation: 'vertical'
+	    TabbedPanel:
+	        default_tab_text: 'Double click to upload image'
+	        default_tab_content: icon_flc
+	        tab_width: self.parent.width / 2
+
+	        FileChooserIconView:
+	            id: icon_flc
+	            show_hidden: True
+	            path: 'C:/Users/Ming/Documents/Visual Studio 2015/Projects/PythonTestApp/PythonTestApp/pic/test'
+	            on_selection: root.show_select()
+	            on_submit: root.upload_image()
+	    Label:
+	    	id: imgpath_label
+	    	size_hint_y: .08
+	    	canvas.before:
+	    		Color:
+	    			rgb: .5, .5, .4
+	    		Rectangle:
+	    			pos: self.pos
+	    			size: self.size
+                            
+<DescScreen>:
+    GridLayout:
+        rows: 4
+        padding: 10
+        spacing: 10
+        BoxLayout:
+            orientation: 'horizontal'
+            Image:
+            	canvas.before:
+		    		Color:
+		    			rgb: .0, .0, .0
+		    		Rectangle:
+		    			pos: self.pos
+		    			size: self.size
+                id: user_img
+                reload: 'True'
+                size: self.size
+            Carousel:
+                id: carousel
+                direction: 'right'
+                loop: 'True'
+        Label:
+            id: title_label
+            size_hint: 0.3, 0.3
+            font_size: 40
+            text: "Your Batik Motif is [b][color=ff3333]" + root.title
+            text_size: root.width, None
+            markup: True
+            halign: 'center'
+            valign: 'middle'
+        TabbedPanel:
+            id: tp
+            size_hint: 0.6, 0.6
+            do_default_tab: False
+            TabbedPanelItem:
+                id: tab_intro
+                text: 'Introduction'
+                Label:
+                    id: tp_label
+                    padding: 5, 0
+                    font_size: 17
+                    text: root.intro
+                    text_size: self.width, None
+                    vallign: 'top'
+            TabbedPanelItem:
+                id: tab_history
+                text: 'History'
+                Label:
+                    padding: 5, 0
+                    font_size: 15
+                    text: root.history
+                    text_size: tp_label.text_size
+                    vallign: tp_label.vallign
+            TabbedPanelItem:
+                id: tab_meaning
+                text: 'Meaning'
+                Label:
+                    padding: 5, 0
+                    font_size: 15
+                    text: root.meaning
+                    text_size: tp_label.text_size
+                    vallign: tp_label.vallign
+
+        BoxLayout:
+            orientation: 'horizontal'
+            size_hint: 0.15, 0.15
+            spacing: 20
+            Button:
+                text: 'See Other Motif'
+                on_release: app.root.current = 'StoryScreen'
+            Button:
+                text: 'Upload Image Again'
+                on_release: app.root.current = 'UploadScreen'
+            Button:
+                text: 'Back to Home Screen'
+                on_release: app.root.current = 'HomeScreen'
+
+<StoryScreen>:
+	GridLayout:
+		canvas.before:
+    		Rectangle:
+    			pos: self.pos
+    			size: self.size
+    			source: 'pic/wall.jpg'
+		rows: 5
+		Label:
+			text: 'Famous Batik Motifs'
+			font_size: 25
+			size_hint: 0.5, 0.1
+		GridLayout:
+			rows: 2
+			BoxLayout:
+				id: boxl
+				orientation: 'vertical'
+				Image:
+					source: 'pic/tm_k.jpg'
+				Button:
+					size_hint: 0.3, 0.13
+					text: 'Kawung'
+					pos_hint: {'center_x': .5, 'center_y': .5}
+					on_release: root.k_click()
+			BoxLayout:
+				orientation: 'vertical'
+				Image:
+					source: 'pic/tm_mm.jpg'
+				Button:
+					size_hint: 0.5, 0.13
+					text: 'Mega Mendung'
+					pos_hint: {'center_x': .5, 'center_y': .5}
+					on_release: root.m_click()
+			BoxLayout:
+				orientation: 'vertical'
+				Image:
+					source: 'pic/tm_p.jpg'
+				Button:
+					size_hint: 0.3, 0.13
+					text: 'Parang'
+					pos_hint: {'center_x': .5, 'center_y': .5}
+					on_release: root.p_click()
+			BoxLayout:
+				orientation: 'vertical'
+				Image:
+					source: 'pic/tm_sm.jpg'
+				Button:
+					size_hint: 0.5, 0.13
+					text: 'Sidomukti Magetan'
+					pos_hint: {'center_x': .5, 'center_y': .5}
+					on_release: root.sm_click()
+		BoxLayout:
+			orientation: 'horizontal'
+			size_hint: 1, 0.12
+			padding: 10
+            spacing: 10
+			Button:
+				text: 'Find Out Your Batik Motif'
+				on_release: app.root.current = 'UploadScreen'
+			Button:
+				text: 'Back to Home Screen'
+				on_release: app.root.current = 'HomeScreen'
+
+<MotifScreen>:
+	GridLayout:
+		rows: 3
+		Carousel:
+            id: mcar
+            direction: 'right'
+            loop: 'True'
+        TabbedPanel:
+        	size_hint: 1, 0.3
+            id: mtp
+            size_hint: 0.6, 0.6
+            do_default_tab: False
+            TabbedPanelItem:
+                id: mtab_intro
+                text: 'Introduction'
+                Label:
+                    id: mtp_label
+                    padding: 5, 0
+                    font_size: 17
+                    text: root.mintro
+                    text_size: self.width, None
+                    vallign: 'top'
+            TabbedPanelItem:
+                id: mtab_history
+                text: 'History'
+                Label:
+                    padding: 5, 0
+                    font_size: 15
+                    text: root.mhistory
+                    text_size: mtp_label.text_size
+                    vallign: mtp_label.vallign
+            TabbedPanelItem:
+                id: mtab_meaning
+                text: 'Meaning'
+                Label:
+                    padding: 5, 0
+                    font_size: 15
+                    text: root.mmeaning
+                    text_size: mtp_label.text_size
+                    vallign: mtp_label.vallign
+        Button:
+        	size_hint: 1, 0.1
+        	text: 'Click to dismiss'
+        	on_release: app.root.current = 'StoryScreen'
